@@ -273,16 +273,18 @@ export const GetAllActiveJobs = TryCatch(async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = (page - 1) * limit;
-    const search = req.query.search?.toString().trim() || "";
-    const location = req.query.location?.toString().trim() || "";
-    const jobType = req.query.jobType?.toString().trim() || "";
-    const workLocation = req.query.workLocation?.toString().trim() || "";
+    // ✅ FIX 1: Use null instead of "" to prevent PostgreSQL enum errors
+    const search = req.query.search?.toString().trim() || null;
+    const location = req.query.location?.toString().trim() || null;
+    const jobType = req.query.jobType?.toString().trim() || null;
+    const workLocation = req.query.workLocation?.toString().trim() || null;
     const companyId = Number(req.query.companyId) || null;
     const sort = req.query.sort || "latest";
     let orderBy = sql `j.created_at DESC`;
     if (sort === "oldest") {
         orderBy = sql `j.created_at ASC`;
     }
+    // ✅ FIX 2: Compare against null instead of ""
     const jobs = await sql `
     SELECT
       j.job_id,
@@ -309,7 +311,7 @@ export const GetAllActiveJobs = TryCatch(async (req, res) => {
       j.isActive = true
 
       AND (
-        ${search === ""}
+        ${search === null}
         OR
         j.title ILIKE ${`%${search}%`}
         OR
@@ -317,19 +319,19 @@ export const GetAllActiveJobs = TryCatch(async (req, res) => {
       )
 
       AND (
-        ${location === ""}
+        ${location === null}
         OR
         j.location ILIKE ${`%${location}%`}
       )
 
       AND (
-        ${jobType === ""}
+        ${jobType === null}
         OR
         j.job_type = ${jobType}
       )
 
       AND (
-        ${workLocation === ""}
+        ${workLocation === null}
         OR
         j.work_location = ${workLocation}
       )
@@ -352,7 +354,7 @@ export const GetAllActiveJobs = TryCatch(async (req, res) => {
       j.isActive = true
 
       AND (
-        ${search === ""}
+        ${search === null}
         OR
         j.title ILIKE ${`%${search}%`}
         OR
@@ -360,19 +362,19 @@ export const GetAllActiveJobs = TryCatch(async (req, res) => {
       )
 
       AND (
-        ${location === ""}
+        ${location === null}
         OR
         j.location ILIKE ${`%${location}%`}
       )
 
       AND (
-        ${jobType === ""}
+        ${jobType === null}
         OR
         j.job_type = ${jobType}
       )
 
       AND (
-        ${workLocation === ""}
+        ${workLocation === null}
         OR
         j.work_location = ${workLocation}
       )

@@ -7,7 +7,7 @@ router.post("/company/new", isAuth, upload, CreateCompany);
 router.delete("/delete/:companyId", isAuth, DeleteCompany);
 router.post("/new", isAuth, upload, CreateJob);
 router.put("/update/:jobId", isAuth, upload, UpdateJob);
-router.get("/all", isAuth, upload, GetAllCompanies);
+router.get("/all", upload, GetAllCompanies);
 router.get("/company/:companyId", isAuth, upload, GetCompanyById);
 router.get("/Activejob", GetAllActiveJobs);
 router.get("/:jobId", GetJobById);
