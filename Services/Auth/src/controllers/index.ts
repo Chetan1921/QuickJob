@@ -166,7 +166,7 @@ export const ForgotPassword = TryCatch(async (req, res, next) => {
     // // console.log("message", message)
     // const topic = 'send-mail'
     // await SendMessage(topic, message)
-
+ // Commented out Kafka Logic for Deployement
 
 
     const transporter = nodemailer.createTransport({
